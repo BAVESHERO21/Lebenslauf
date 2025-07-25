@@ -4,22 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lebenslauf Generator</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background: #f4f4f4;
+text-align: center;
+padding: 40px;
+}
+
+h1 {
+color: #333;
+}
+
+form {
+background: #fff;
+padding: 30px;
+margin: auto;
+max-width: 400px;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input {
+width: 90%;
+padding: 10px;
+margin: 10px 0;
+border-radius: 5px;
+border: 1px solid #ccc;
+}
+
+button {
+padding: 10px 20px;
+background-color: #0070ba;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+#paypal-button-container {
+margin-top: 30px;
+}
+</style>
 </head>
 <body>
-<h1>Willkommen beim Lebenslauf Generator</h1>
-<p>Mit diesem Tool können Sie kostenlos und automatisch einen Lebenslauf als PDF erstellen.</p>
 
-<form>
-<label for="vorname">Vorname:</label><br>
-<input type="text" id="vorname" name="vorname"><br><br>
+<h1>Lebenslauf Generator</h1>
+<p>Erstellen Sie Ihren professionellen Lebenslauf – nur 1,99 €</p>
 
-<label for="nachname">Nachname:</label><br>
-<input type="text" id="nachname" name="nachname"><br><br>
-
-<label for="email">E-Mail:</label><br>
-<input type="email" id="email" name="email"><br><br>
-
-<button type="submit">PDF Erstellen</button>
+<form id="cv-form">
+<input type="text" id="vorname" name="vorname" placeholder="Vorname" required>
+<input type="text" id="nachname" name="nachname" placeholder="Nachname" required>
+<input type="email" id="email" name="email" placeholder="E-Mail" required>
 </form>
+
+<div id="paypal-button-container"></div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=**HIER_CLIENT_ID_EINFÜGEN**&currency=EUR"></script>
+<script>
+paypal.Buttons({
+style: {
+color: 'blue',
+shape: 'pill',
+label: 'pay'
+},
+createOrder: function(data, actions) {
+return actions.order.create({
+purchase_units: [{
+amount: {
+value: '1.99'
+}
+}]
+});
+},
+onApprove: function(data, actions) {
+return actions.order.capture().then(function(details) {
+alert('Zahlung erfolgreich! Lebenslauf wird erstellt...');
+window.location.href = "lebenslauf.pdf"; // Zielseite für den Download
+});
+}
+}).render('#paypal-button-container');
+</script>
+
 </body>
 </html>
